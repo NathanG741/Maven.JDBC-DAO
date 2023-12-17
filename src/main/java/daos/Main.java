@@ -1,22 +1,40 @@
 package daos;
 
+import models.Car;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class Main {
 
-    public static void  main (String[] args) throws SQLException {
+    public static void  main (String[] args) {
         Dao_Class dao = new Dao_Class();
-        ResultSet rs = (ResultSet) dao.findById(1234);
-        if(rs.next())
-        {
 
-            System.out.println(rs.getInt("id"));
-            System.out.println(rs.getString("model"));
+        // CREATE
+        Car car = new Car(91011, "Toyota", "Corolla", 2016, "Gray", "GHI789");
+        dao.create(car);
 
+        // READ
+        Car findCar = (Car) dao.findById(car.getID());
+        System.out.println("Find By ID = " + findCar.getID());
+
+        // UPDATE
+        car.setColor("Silver");
+        Car updateCar = (Car) dao.update(car);
+        System.out.println("Update = " + updateCar.getID() + " " + updateCar.getColor());
+
+        // DELETE
+        dao.delete(car.getID());
+
+        // READ ALL
+        List<Car> carList = dao.findAll();
+        for (Car carObj : carList) {
+            System.out.println("Find All = " + carObj.getID());
         }
+
     }
 
     public static Connection getConnection(){
